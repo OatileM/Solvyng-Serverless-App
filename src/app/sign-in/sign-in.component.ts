@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 import { IUser, CognitoService } from '../cognito.service';
 
@@ -20,6 +21,12 @@ export class SignInComponent {
   }
 
   public signIn(): void {
+    // Check if required fields are empty
+    if (!this.user.email || !this.user.password) {
+      Swal.fire('Input Error', 'Please input all fields', 'error');
+      return;
+    }
+
     this.loading = true;
     this.cognitoService.signIn(this.user)
     .then(() => {
@@ -28,5 +35,4 @@ export class SignInComponent {
       this.loading = false;
     });
   }
-
 }
