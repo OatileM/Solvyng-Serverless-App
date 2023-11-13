@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import Amplify, { Auth } from 'aws-amplify';
+import { Amplify } from 'C:/Users/shell/Desktop/Solvyng/Solvyng-Serverless-App/node_modules/aws-amplify/lib-esm/index';
+import { Auth } from 'C:/Users/shell/Desktop/Solvyng/Solvyng-Serverless-App/node_modules/aws-amplify/lib-esm/index';
 
 import { environment } from '../environments/environment';
 
@@ -16,7 +17,6 @@ export interface IUser {
   providedIn: 'root',
 })
 export class CognitoService {
-
   private authenticationSubject: BehaviorSubject<any>;
 
   constructor() {
@@ -39,15 +39,13 @@ export class CognitoService {
   }
 
   public signIn(user: IUser): Promise<any> {
-    return Auth.signIn(user.email, user.password)
-    .then(() => {
+    return Auth.signIn(user.email, user.password).then(() => {
       this.authenticationSubject.next(true);
     });
   }
 
   public signOut(): Promise<any> {
-    return Auth.signOut()
-    .then(() => {
+    return Auth.signOut().then(() => {
       this.authenticationSubject.next(false);
     });
   }
@@ -57,15 +55,16 @@ export class CognitoService {
       return Promise.resolve(true);
     } else {
       return this.getUser()
-      .then((user: any) => {
-        if (user) {
-          return true;
-        } else {
+        .then((user: any) => {
+          if (user) {
+            return true;
+          } else {
+            return false;
+          }
+        })
+        .catch(() => {
           return false;
-        }
-      }).catch(() => {
-        return false;
-      });
+        });
     }
   }
 
@@ -74,10 +73,8 @@ export class CognitoService {
   }
 
   public updateUser(user: IUser): Promise<any> {
-    return Auth.currentUserPoolUser()
-    .then((cognitoUser: any) => {
+    return Auth.currentUserPoolUser().then((cognitoUser: any) => {
       return Auth.updateUserAttributes(cognitoUser, user);
     });
   }
-
 }
