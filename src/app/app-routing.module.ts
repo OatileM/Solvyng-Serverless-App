@@ -12,7 +12,7 @@ import { UploadComponent } from './upload/upload.component';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'user/profile',
+    redirectTo: '/signIn',
     pathMatch: 'full',
   },
   {
